@@ -31,4 +31,4 @@ node_modules/
 
 .DS_Store
 
-config/config.js
+config/config.json
