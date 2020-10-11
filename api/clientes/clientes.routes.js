@@ -1,14 +1,15 @@
 'use strict';
 
-const controller = require('./user.controller');
+const controller = require('./clientes.controller');
 
 module.exports = Router => {
   const router = new Router({
-    prefix: `/users`,
+    prefix: `/clientes`,
   });
 
   router
-    .get('/:userId', controller.getOne)
+    .get('/:id', controller.getOne)
+    .delete('/:id', controller.delete)
     .get('/', controller.getAll)
     .post('/', controller.createOne);
 
