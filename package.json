@@ -9,7 +9,8 @@
     "format": "prettier --write \"**/*.+(js|yml|yaml|json)\"",
     "lint": "eslint .",
     "start": "node index.js",
-    "test": "NODE_ENV=test jest'"
+    "test": "NODE_ENV=test jest'",
+    "dbsync": "node scripts/dbsync.js"
   },
   "devDependencies": {
     "eslint": "5.16.0",
