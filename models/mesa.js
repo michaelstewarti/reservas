@@ -16,19 +16,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: 'nombre',
       },
-      apellido: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        field: 'apellido',
-      },
       x: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
         field: 'x',
       },
       y: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
         field: 'y',
       },
       planta: {
