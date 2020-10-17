@@ -11,6 +11,28 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         field: 'id',
       },
+      fecha: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        field: 'fecha',
+      },
+      rangos: {
+        type: DataTypes.ARRAY(
+          DataTypes.ENUM({
+            values: [
+              '12 a 13',
+              '13 a 14',
+              '14 a 15',
+              '19 a 20',
+              '20 a 21',
+              '21 a 22',
+              '22 a 23',
+            ],
+          }),
+        ),
+        allowNull: false,
+        field: 'rangos',
+      },
     },
     {
       reserva: true,

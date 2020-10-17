@@ -10,6 +10,12 @@ exports.getOne = async ctx => {
   ctx.body = mesa;
 };
 
+exports.getDisponibles = async ctx => {
+  // TODO
+  ctx.status = 200;
+  ctx.body = await Mesa.findAll();
+};
+
 exports.delete = async ctx => {
   const { id } = ctx.params;
   const mesa = await Mesa.findByPk(id);

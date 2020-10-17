@@ -9,6 +9,7 @@ module.exports = Router => {
 
   router
     .get('/:id', controller.getOne)
+    .get('/disponibles', controller.getDisponibles)
     .delete('/:id', controller.delete)
     .get('/', controller.getAll)
     .post('/', controller.createOne);
