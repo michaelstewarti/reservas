@@ -1,6 +1,12 @@
 'use strict';
 
-const { mesa: Mesa } = require('../../models');
+const {
+  mesa: Mesa,
+  reserva: Reserva,
+  Sequelize: {
+    Op: { or, contains, notIn },
+  },
+} = require('../../models');
 
 exports.getOne = async ctx => {
   const { id } = ctx.params;
@@ -11,9 +17,38 @@ exports.getOne = async ctx => {
 };
 
 exports.getDisponibles = async ctx => {
-  // TODO
+  const { rangos, fecha, restauranteId } = ctx.query;
+
+  ctx.assert(fecha, 400, 'Fecha no definida');
+  ctx.assert(restauranteId, 400, 'Restaurante no definido');
+  ctx.assert(rangos, 400, 'Rangos no definidos');
+
   ctx.status = 200;
-  ctx.body = await Mesa.findAll();
+
+  const rangosConsulta = (typeof rangos === 'object' && rangos) || [rangos];
+
+  const idsMesasReservadas = await Reserva.findAll({
+    attributes: ['mesaId'],
+    where: {
+      fecha: new Date(fecha),
+      [or]: rangosConsulta.map(rango => {
+        return {
+          rangos: {
+            [contains]: [rango],
+          },
+        };
+      }),
+    },
+  });
+
+  ctx.body = await Mesa.findAll({
+    where: {
+      restauranteId,
+      id: {
+        [notIn]: idsMesasReservadas,
+      },
+    },
+  });
 };
 
 exports.delete = async ctx => {
