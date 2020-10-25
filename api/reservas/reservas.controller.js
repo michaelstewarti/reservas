@@ -1,6 +1,10 @@
 'use strict';
 
-const { reserva: Reserva, cliente: Cliente } = require('../../models');
+const {
+  reserva: Reserva,
+  cliente: Cliente,
+  mesa: Mesa,
+} = require('../../models');
 
 exports.getOne = async ctx => {
   const { id } = ctx.params;
@@ -20,8 +24,27 @@ exports.delete = async ctx => {
 };
 
 exports.getAll = async ctx => {
+  const { clienteId, fecha, restauranteId } = ctx.query;
+
+  const options = {
+    include: {
+      model: Mesa,
+    },
+    where: {},
+    order: [['mesaId', 'ASC'], ['rangos', 'ASC']],
+  };
+  if (clienteId) {
+    options.where.clienteId = clienteId;
+  }
+  if (restauranteId) {
+    options.where['$mesa.restaurante_id$'] = restauranteId;
+  }
+  if (fecha) {
+    options.where.fecha = new Date(fecha);
+  }
+
   ctx.status = 200;
-  ctx.body = await Reserva.findAll();
+  ctx.body = await Reserva.findAll(options);
 };
 
 exports.createOne = async ctx => {
