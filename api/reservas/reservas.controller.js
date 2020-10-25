@@ -1,6 +1,6 @@
 'use strict';
 
-const { reserva: Reserva } = require('../../models');
+const { reserva: Reserva, cliente: Cliente } = require('../../models');
 
 exports.getOne = async ctx => {
   const { id } = ctx.params;
@@ -25,12 +25,24 @@ exports.getAll = async ctx => {
 };
 
 exports.createOne = async ctx => {
-  const { mesaId, clienteId } = ctx.request.body;
-  ctx.assert(mesaId, 400, 'Info reserva mal formada');
-  ctx.assert(clienteId, 400, 'Info reserva mal formada');
-  const reserva = Reserva.create({
+  const { mesaId, ci, fecha, rangos } = ctx.request.body;
+
+  ctx.assert(mesaId, 400, 'mesaId requerido');
+  ctx.assert(ci, 400, 'ci requerido');
+  ctx.assert(fecha, 400, 'fecha requerido');
+  ctx.assert(rangos, 400, 'rangos requerido');
+
+  const cliente = await Cliente.findOne({
+    where: {
+      ci,
+    },
+  });
+  ctx.assert(cliente, 400, 'not_registered');
+  const reserva = await Reserva.create({
+    fecha: new Date(fecha),
     mesaId,
-    clienteId,
+    clienteId: cliente.id,
+    rangos: (typeof rangos === 'object' && rangos) || [rangos],
   });
   ctx.status = 201;
   ctx.body = reserva;

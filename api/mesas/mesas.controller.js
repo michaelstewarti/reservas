@@ -39,6 +39,11 @@ exports.getDisponibles = async ctx => {
         };
       }),
     },
+  }).then(results => {
+    if (results.length) {
+      return results.map(result => result.mesaId);
+    }
+    return results;
   });
 
   ctx.body = await Mesa.findAll({
