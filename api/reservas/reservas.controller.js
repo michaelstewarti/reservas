@@ -40,7 +40,7 @@ exports.getAll = async ctx => {
     options.where['$mesa.restaurante_id$'] = restauranteId;
   }
   if (fecha) {
-    options.where.fecha = new Date(fecha);
+    options.where.fecha = new Date(fecha.replace(/T00/gi, 'T12'));
   }
 
   ctx.status = 200;
@@ -62,7 +62,7 @@ exports.createOne = async ctx => {
   });
   ctx.assert(cliente, 400, 'not_registered');
   const reserva = await Reserva.create({
-    fecha: new Date(fecha),
+    fecha: new Date(fecha.replace(/T00/gi, 'T12')),
     mesaId,
     clienteId: cliente.id,
     rangos: (typeof rangos === 'object' && rangos) || [rangos],

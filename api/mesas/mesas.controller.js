@@ -4,7 +4,7 @@ const {
   mesa: Mesa,
   reserva: Reserva,
   Sequelize: {
-    Op: { or, contains, notIn },
+    Op: { overlap, notIn },
   },
 } = require('../../models');
 
@@ -30,14 +30,10 @@ exports.getDisponibles = async ctx => {
   const idsMesasReservadas = await Reserva.findAll({
     attributes: ['mesaId'],
     where: {
-      fecha: new Date(fecha),
-      [or]: rangosConsulta.map(rango => {
-        return {
-          rangos: {
-            [contains]: [rango],
-          },
-        };
-      }),
+      fecha: new Date(fecha.replace(/T00/gi, 'T12')),
+      rangos: {
+        [overlap]: rangosConsulta,
+      },
     },
   }).then(results => {
     if (results.length) {
