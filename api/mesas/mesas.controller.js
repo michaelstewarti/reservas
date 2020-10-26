@@ -25,7 +25,20 @@ exports.getDisponibles = async ctx => {
 
   ctx.status = 200;
 
-  const rangosConsulta = (typeof rangos === 'object' && rangos) || [rangos];
+  let rangosConsulta = [];
+
+  if (typeof rangos === 'object') {
+    rangosConsulta = rangos;
+  } else if (rangos.includes('[')) {
+    rangosConsulta = rangos
+      .replace(']', '')
+      .replace('[', '')
+      .replace("'", '')
+      .replace(', ', ',')
+      .split(',');
+  } else {
+    rangosConsulta = [rangos];
+  }
 
   const idsMesasReservadas = await Reserva.findAll({
     attributes: ['mesaId'],
